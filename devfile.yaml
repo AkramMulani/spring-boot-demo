@@ -16,36 +16,14 @@ components:
     memoryLimit: 2048M
     mountSources: true
 commands:
-  - name: Open File
+  - name: Open File  # Corrected indentation
     actions:
-      - type: openFile
-        file: /projects/spring-boot-demo/README.md
+      - type: open  # Replaced 'openFile' with 'open'
+        path: /projects/spring-boot-demo/README.md  # Added 'path' field
+
   - name: Build
     actions:
       - type: exec
         component: dev-machine
         command: mvn clean install
         workdir: /projects/spring-boot-demo
-#  - name: Find Text
-#    actions:
-#      - type: findText
-#        file: /projects/my-project/src/main/java/com/example/MyClass.java
-#        text: TODO
-#  - name: Welcome Page
-#    actions:
-#      - type: openWebview
-#        url: https://example.com/welcome.html
-#  - name: New Terminal
-#    actions:
-#      - type: newTerminal
-#        name: MyTerminal
-#  - name: New File
-#    actions:
-#      - type: newFile
-#        file: /projects/my-project/src/main/java/com/example/NewClass.java
-#        content: |
-#          package com.example;
-#
-#          public class NewClass {
-#              // Add your code here
-#          }
