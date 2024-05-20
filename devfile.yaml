@@ -1,0 +1,51 @@
+apiVersion: 1.0.0
+metadata:
+  name: sample-workspace
+projects:
+  - name: spring-boot-demo
+    source:
+      type: git
+      location: 'https://github.com/AkramMulani/spring-boot-demo.git'
+components:
+  - type: cheEditor
+    alias: intellij-editor
+    id: redhat/intellij-community/latest
+  - type: dockerimage
+    alias: dev-machine
+    image: 'eclipse/ubuntu_jdk8'
+    memoryLimit: 2048M
+    mountSources: true
+commands:
+  - name: Open File
+    actions:
+      - type: openFile
+        file: /projects/spring-boot-demo/README.md
+  - name: Build
+    actions:
+      - type: exec
+        component: dev-machine
+        command: mvn clean install
+        workdir: /projects/spring-boot-demo
+#  - name: Find Text
+#    actions:
+#      - type: findText
+#        file: /projects/my-project/src/main/java/com/example/MyClass.java
+#        text: TODO
+#  - name: Welcome Page
+#    actions:
+#      - type: openWebview
+#        url: https://example.com/welcome.html
+#  - name: New Terminal
+#    actions:
+#      - type: newTerminal
+#        name: MyTerminal
+#  - name: New File
+#    actions:
+#      - type: newFile
+#        file: /projects/my-project/src/main/java/com/example/NewClass.java
+#        content: |
+#          package com.example;
+#
+#          public class NewClass {
+#              // Add your code here
+#          }
