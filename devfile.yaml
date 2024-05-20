@@ -1,4 +1,4 @@
-apiVersion: 1.0.0
+schemaVersion: 2.1.0
 metadata:
   name: sample-workspace
 projects:
@@ -15,15 +15,4 @@ components:
     image: 'eclipse/ubuntu_jdk8'
     memoryLimit: 2048M
     mountSources: true
-#commands:
-#  - name: Open File  # Corrected indentation
-#    actions:
-#      - type: open  # Replaced 'openFile' with 'open'
-#        path: /projects/spring-boot-demo/README.md  # Added 'path' field
-#
-#  - name: Build
-#    actions:
-#      - type: exec
-#        component: dev-machine
-#        command: mvn clean install
-#        workdir: /projects/spring-boot-demo
+
