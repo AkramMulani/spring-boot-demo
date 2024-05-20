@@ -1,31 +1,4 @@
-schemaVersion: 2.2.0
+schemaVersion: <version>
 metadata:
-  name: java-springboot
-  language: java
-components:
-  - name: springboot-app
-    container:
-      endpoints:
-        - name: http
-          targetPort: 8080
-      image: eclipse/openjdk:17-slim  # Replace with your preferred Java image
-      memoryLimit: 1024Mi
-      mountSources: true
-      workingDir: /workspace  # Optional, working directory inside the container
-commands:
-  - name: Build  # Command to build the Spring Boot application
-    actions:
-      - type: exec
-        component: springboot-app
-        command: mvn clean package  # Replace with your build command (e.g., gradle build)
-        workdir: /workspace  # Optional, specific working directory for build command
-  - name: Run  # Command to run the Spring Boot application
-    actions:
-      - type: exec
-        component: springboot-app
-        command: java -jar /workspace/target/*.jar  # Replace with your application startup command
-        workdir: /workspace  # Optional, specific working directory for running the application
-projects:
-  - name: springboot-project  # Descriptive name for your project
-    git:
-      uri: https://github.com/AkramMulani/spring-boot-demo.git  # Replace with your Git repository URL
+  name: devfile-sample
+  version: 0.0.1
