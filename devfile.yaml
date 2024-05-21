@@ -10,13 +10,6 @@ metadata:
   architectures: [ 'amd64' ]
   displayName: Simple Web Service
   icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
-components:
-  - name: web
-    container:
-      endpoints:
-        - name: http
-          targetPort: 8080
-      image: quay.io/devfile/universal-developer-image
 commands:
   - id: build
     exec:
