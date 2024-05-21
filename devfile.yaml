@@ -22,7 +22,7 @@ commands:
     exec:
       commandLine: mvn clean install
       component: web
-      workingDir: ${PROJECT_SOURCE}
+      workingDir: /projects/spring-boot-demo
       group:
         kind: build
         isDefault: true
