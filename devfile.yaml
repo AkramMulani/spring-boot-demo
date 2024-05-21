@@ -17,3 +17,20 @@ components:
         - name: http
           targetPort: 8080
       image: quay.io/devfile/universal-developer-image
+commands:
+  - id: build
+    exec:
+      commandLine: mvn clean install
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+  - id: run
+    exec:
+      commandLine: mvn spring-boot:run
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
