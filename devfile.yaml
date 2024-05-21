@@ -16,4 +16,4 @@ components:
       endpoints:
         - name: http
           targetPort: 8080
-      image: quay.io/devfile/maven:latest
+      image: quay.io/devfile/maven:latest-onbuild
