@@ -16,4 +16,4 @@ components:
       endpoints:
         - name: http
           targetPort: 8080
-      image: quay.io/devfile/maven:3.8.5-openjdk-17
+      image: quay.io/devfile/universal-developer-image
