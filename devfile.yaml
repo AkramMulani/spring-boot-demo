@@ -2,3 +2,11 @@ schemaVersion: 2.2.2
 metadata:
   name: devfile-sample
   version: 0.0.1
+  description: A sample web service template.
+  projectType: Java
+  language: Java
+  provider: GitHub
+  tags: [ 'Java', 'Jar' ]
+  architectures: [ 'amd64' ]
+  displayName: Simple Web Service
+  icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
