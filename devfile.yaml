@@ -21,6 +21,7 @@ commands:
   - id: build
     exec:
       commandLine: mvn clean install
+      component: web
       workingDir: /projects/spring-boot-demo
       group:
         kind: build
