@@ -32,6 +32,7 @@ components:
             type: "RuntimeDefault"
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
+      RUN apk add --no-cache openjdk8 maven # Install OpenJDK and Maven
       command:
         - mvn clean install
         - mvn spring-boot:run
@@ -48,24 +49,6 @@ components:
     volume:
       ephemeral: true
       size: 0.2Gi
-commands:
-  - id: build
-    exec:
-      commandLine: mvn clean install
-      component: runner
-      workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
-      group:
-        kind: build
-        isDefault: true
-  - id: run
-    exec:
-      commandLine: mvn spring-boot:run
-      component: runner
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: run
-        isDefault: true
 variables:
   # Memory limit on runner, default: 1Gi
   memoryLimit: 1Gi
