@@ -24,7 +24,7 @@ components:
       image: quay.io/devfile/universal-developer-image:latest
       env:
         - name: KUBEDOCK_ENABLED
-          value: true
+          value: "true"
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
 commands:
