@@ -23,6 +23,7 @@ components:
     container:
       image: quay.io/devfile/maven:latest
       command:
+        - wget -q https://apache.claz.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz -O /tmp/maven.tar.gz && tar xf /tmp/maven.tar.gz -C /opt && rm /tmp/maven.tar.gz
         - mvn clean install
         - mvn spring-boot:run
       mountSources: true
