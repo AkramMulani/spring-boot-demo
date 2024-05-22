@@ -27,7 +27,7 @@ components:
 commands:
   - id: build
     exec:
-      commandLine: mvn clean install
+      commandLine: maven clean install
       component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
