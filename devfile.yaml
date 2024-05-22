@@ -44,6 +44,7 @@ commands:
       commandLine: mvn clean install
       component: runner
       workingDir: ${PROJECT_SOURCE}
+      hotReloadCapable: true
       group:
         kind: build
         isDefault: true
