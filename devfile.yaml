@@ -32,8 +32,8 @@ components:
             type: "RuntimeDefault"
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
-      RUN apk add --no-cache openjdk8 maven # Install OpenJDK and Maven
       command:
+        - RUN apk add --no-cache openjdk8 maven # Install OpenJDK and Maven
         - mvn clean install
         - mvn spring-boot:run
       mountSources: true
