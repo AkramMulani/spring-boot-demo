@@ -31,7 +31,7 @@ components:
           seccompProfile:
             type: "RuntimeDefault"
     container:
-      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      image: quay.io/devfile/maven:latest
       command:
         - RUN apk add --no-cache openjdk8 maven # Install OpenJDK and Maven
         - mvn clean install
