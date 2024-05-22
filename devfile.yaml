@@ -22,8 +22,6 @@ components:
   - name: runner
     container:
       image: quay.io/devfile/universal-developer-image:latest
-      command:
-        - maven spring-boot:run
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
 commands:
