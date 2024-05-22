@@ -22,7 +22,21 @@ commands:
     exec:
       commandLine: mvn clean install
       component: web
-      workingDir: /projects/spring-boot-demo
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
         isDefault: true
+  - id: run
+    exec:
+      commandLine: mvn spring-boot:run
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
+starterProjects:
+  - name: spring-boot-demo
+    description: Demo project for spring boot.
+    git:
+      remotes:
+        origin: https://github.com/AkramMulani/spring-boot-demo.git
