@@ -21,7 +21,7 @@ projects:
 components:
   - name: runner
     container:
-      image: quay.io/devfile/universal-developer-image:latest
+      image: quay.io/devfile/maven:latest
       command:
         - mvn clean install
         - mvn spring-boot:run
