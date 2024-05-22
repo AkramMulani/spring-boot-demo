@@ -29,7 +29,8 @@ components:
           capabilities:
             drop: ["ALL"]
           seccompProfile:
-            type: "RuntimeDefault"  - name: universal-developer-image
+            type: "RuntimeDefault"  
+  - name: universal-developer-image
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
       mountSources: true
