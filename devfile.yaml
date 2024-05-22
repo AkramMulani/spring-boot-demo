@@ -10,3 +10,29 @@ metadata:
   architectures: [ 'amd64' ]
   displayName: Simple Web Service
   icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
+projects:
+  - name: spring-boot-demo
+    git:
+      remotes:
+        origin: https://github.com/AkramMulani/spring-boot-demo.git
+components:
+  - name: universal-developer-image
+    container:
+      image: quay.io/devfile/universal-developer-image:ubi8-latest
+commands:
+  - id: build
+    exec:
+      commandLine: mvn clean install
+      component: universal-developer-image
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+  - id: run
+    exec:
+      commandLine: mvn spring-boot:run
+      component: universal-developer-image
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
