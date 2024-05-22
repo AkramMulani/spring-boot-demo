@@ -49,7 +49,7 @@ commands:
   - id: build
     exec:
       commandLine: apt-get update && apt-get install -y maven && mvn clean install
-      component: web
+      component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
@@ -57,7 +57,7 @@ commands:
   - id: run
     exec:
       commandLine: mvn spring-boot:run
-      component: web
+      component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
