@@ -6,7 +6,10 @@ metadata:
   projectType: Java
   language: Java
   provider: GitHub
-  tags: [ 'Java', 'Jar' ]
+  tags:
+    - Java
+    - Maven
+    - SpringBoot
   architectures: [ 'amd64' ]
   displayName: Simple Web Service
   icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
@@ -16,14 +19,33 @@ projects:
       remotes:
         origin: https://github.com/AkramMulani/spring-boot-demo.git
 components:
-  - name: universal-developer-image
+  - name: runner
+    attributes:
+      container-overrides:
+        securityContext:
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: "RuntimeDefault"  - name: universal-developer-image
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
+      mountSources: true
+      memoryLimit: "{{memoryLimit}}"
+      volumeMounts:
+        - name: maven
+          path: /.mvn
+      endpoints:
+        - name: http-4200
+          protocol: http
+          targetPort: 4200
 commands:
   - id: build
     exec:
       commandLine: mvn clean install
-      component: universal-developer-image
+      component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
@@ -31,8 +53,11 @@ commands:
   - id: run
     exec:
       commandLine: mvn spring-boot:run
-      component: universal-developer-image
+      component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
         isDefault: true
+variables:
+  # Memory limit on runner, default: 1Gi
+  memoryLimit: 1Gi
