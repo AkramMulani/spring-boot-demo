@@ -23,7 +23,8 @@ components:
     container:
       image: quay.io/devfile/universal-developer-image:latest
       env:
-        - KUBEDOCK_ENABLED=true
+        - name: KUBEDOCK_ENABLED
+          value: true
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
 commands:
@@ -32,6 +33,8 @@ commands:
       commandLine: maven clean install
       component: runner
       workingDir: ${PROJECT_SOURCE}
+      label: build spring boot demo
+      hotReloadCapable: true
       group:
         kind: build
         isDefault: true
@@ -39,6 +42,7 @@ commands:
     exec:
       commandLine: mvn spring-boot:run
       component: runner
+      label: run spring boot demo
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
