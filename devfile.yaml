@@ -34,9 +34,6 @@ components:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
-      volumeMounts:
-        - name: maven
-          path: /.mvn
       endpoints:
         - name: http-4200
           protocol: http
