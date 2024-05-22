@@ -21,13 +21,26 @@ projects:
 components:
   - name: runner
     container:
-      image: quay.io/devfile/maven:latest
-      command:
-        - wget -q https://apache.claz.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz -O /tmp/maven.tar.gz && tar xf /tmp/maven.tar.gz -C /opt && rm /tmp/maven.tar.gz
-        - mvn clean install
-        - mvn spring-boot:run
+      image: quay.io/devfile/universal-developer-image:latest
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
+commands:
+  - id: build
+    exec:
+      commandLine: mvn clean install
+      component: runner
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+   - id: run
+     exec:
+      commandLine: mvn spring-boot:run
+      component: runner
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
 variables:
   # Memory limit on runner, default: 1Gi
   memoryLimit: 1Gi
