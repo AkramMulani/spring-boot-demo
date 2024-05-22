@@ -28,9 +28,9 @@ components:
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
 commands:
-  - id: build
+  - id: build-spring-boot
     exec:
-      commandLine: maven clean install
+      commandLine: mvn clean install
       component: runner
       workingDir: ${PROJECT_SOURCE}
       label: build spring boot demo
@@ -38,7 +38,7 @@ commands:
       group:
         kind: build
         isDefault: true
-  - id: run
+  - id: run-spring-boot
     exec:
       commandLine: mvn spring-boot:run
       component: runner
@@ -47,6 +47,10 @@ commands:
       group:
         kind: run
         isDefault: true
+events:
+  postStart:
+    - build-spring-boot
+    - run-spring-boot
 variables:
   # Memory limit on runner, default: 1Gi
   memoryLimit: 1Gi
