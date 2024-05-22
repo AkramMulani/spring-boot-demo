@@ -32,6 +32,9 @@ components:
             type: "RuntimeDefault"
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
+      commands:
+        - build
+        - run
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
       volumeMounts:
