@@ -20,6 +20,16 @@ projects:
         origin: https://github.com/AkramMulani/spring-boot-demo.git
 components:
   - name: runner
+    attributes:
+      container-overrides:
+        securityContext:
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: "RuntimeDefault"
     container:
       image: quay.io/devfile/maven:latest
       mountSources: true
@@ -38,7 +48,7 @@ components:
 commands:
   - id: build
     exec:
-      commandLine: apt-get update && apt-get install -y maven && mvn clean install
+      commandLine: mvn clean install
       component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
