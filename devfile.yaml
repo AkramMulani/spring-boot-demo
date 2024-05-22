@@ -34,10 +34,17 @@ components:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
+      volumeMounts:
+        - name: target
+          path: /target
       endpoints:
         - name: http-4200
           protocol: http
           targetPort: 4200
+  - name: target
+    volume:
+      ephemeral: true
+      size: 0.2Gi
 commands:
   - id: build
     exec:
