@@ -25,16 +25,16 @@ components:
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
 commands:
-  - id: build
-    exec:
+  - exec:
+      id: build
       commandLine: mvn clean install
       component: runner
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
         isDefault: true
-  - id: run
-    exec:
+  - exec:
+      id: run
       commandLine: mvn spring-boot:run
       component: runner
       workingDir: ${PROJECT_SOURCE}
