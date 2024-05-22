@@ -32,9 +32,7 @@ components:
             type: "RuntimeDefault"
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-latest
-      command:
-        - build
-        - run
+      command: mvn clean install spring-boot:run
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
       volumeMounts:
