@@ -51,7 +51,7 @@ commands:
         kind: debug
         isDefault: true
 events:
-  workspaceStarted:
+  preStart:
     commands:
       - build-project
       - run-project
