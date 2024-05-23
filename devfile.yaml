@@ -50,6 +50,12 @@ commands:
       group:
         kind: debug
         isDefault: true
+  - id: installandpackage
+    composite:
+      commands:
+        - build-project
+        - run-project
+      parallel: false
 events:
   preStart:
-    - run-project
+    - installandpackage
