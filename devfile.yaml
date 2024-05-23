@@ -17,18 +17,30 @@ commands:
     exec:
       component: maven
       commandLine: 'mvn package'
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
   - id: install
     exec:
       component: maven
       commandLine: 'mvn install'
+      workingDir: ${PROJECT_SOURCE}
       group:
         kind: build
         isDefault: true
+  - id: spring-boot-run
+    exec:
+      component: maven
+      commandLine: 'mvn spring-boot:run'
+      workingDir: ${PROJECT_SOURCE}
   - id: installandpackage
     composite:
       commands:
         - install
         - package
+        - spring-boot-run
       parallel: false
+events:
+  componentStart:
+      component: maven
+      after: installandpackage
