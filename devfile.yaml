@@ -1,6 +1,6 @@
 schemaVersion: 2.2.2
 metadata:
-  name: workspace-devfile-sample2
+  name: workspace-devfile-sample3
   version: 0.0.1
   description: A sample web service template.
   projectType: Java
@@ -24,7 +24,8 @@ commands:
       component: web
       workingDir: ${PROJECT_SOURCE}
       group:
-        kind: run
+        kind: build
+        isDefault: true
   - id: run-project
     exec:
       commandLine: mvn spring-boot:run
@@ -48,4 +49,4 @@ commands:
       parallel: false
 events:
   postStart:
-    - build-project
+    - run-project
