@@ -32,7 +32,7 @@ commands:
       component: web
       workingDir: ${PROJECT_SOURCE}
       group:
-        kind: build
+        kind: run
         isDefault: true
   - id: run-project
     exec:
@@ -50,12 +50,9 @@ commands:
       group:
         kind: debug
         isDefault: true
-  - id: installandpackage
-    composite:
-      commands:
-        - build-project
-        - run-project
-      parallel: false
+  - id: run-my-app
+    apply:
+      component: web
 events:
   preStart:
-    - installandpackage
+    - run-my-app
