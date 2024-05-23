@@ -22,14 +22,14 @@ components:
   - name: runner
     container:
       image: quay.io/devfile/universal-developer-image:latest
-      command: ["tail"]
+      command: ['tail']
       env:
         - name: KUBEDOCK_ENABLED
           value: "true"
       mountSources: true
       memoryLimit: "{{memoryLimit}}"
 commands:
-  - id: build-spring-boot
+  - id: build
     exec:
       commandLine: mvn clean install
       component: runner
@@ -39,7 +39,7 @@ commands:
       group:
         kind: build
         isDefault: true
-  - id: run-spring-boot
+  - id: run
     exec:
       commandLine: mvn spring-boot:run
       component: runner
@@ -48,10 +48,6 @@ commands:
       group:
         kind: run
         isDefault: true
-events:
-  postStart:
-    - build-spring-boot
-    - run-spring-boot
 variables:
   # Memory limit on runner, default: 1Gi
   memoryLimit: 1Gi
