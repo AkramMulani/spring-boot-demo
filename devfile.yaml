@@ -1,72 +1,53 @@
 schemaVersion: 2.2.2
 metadata:
-  name: devfile-sample2
+  name: devfile-sample1
   version: 0.0.1
   description: A sample web service template.
   projectType: Java
   language: Java
   provider: GitHub
-  tags:
-    - Java
-    - Maven
-    - SpringBoot
+  tags: [ 'Java', 'Jar' ]
   architectures: [ 'amd64' ]
   displayName: Simple Web Service
   icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
-projects:
-  - name: spring-boot-demo
-    git:
-      remotes:
-        origin: https://github.com/AkramMulani/spring-boot-demo.git
 components:
-  - name: runner
-    attributes:
-      container-overrides:
-        securityContext:
-          runAsUser: 1001
-          allowPrivilegeEscalation: false
-          runAsNonRoot: true
-          capabilities:
-            drop: ["ALL"]
-          seccompProfile:
-            type: "RuntimeDefault"
+  - name: web
     container:
-      image: quay.io/devfile/universal-developer-image:ubi8-latest
-      mountSources: true
-      memoryLimit: "{{memoryLimit}}"
-      volumeMounts:
-        - name: target
-          path: /target
       endpoints:
-        - name: http-4200
-          protocol: http
-          targetPort: 4200
-  - name: target
-    volume:
-      ephemeral: true
-      size: 0.2Gi
+        - name: http
+          targetPort: 8080
+      image: quay.io/devfile/universal-developer-image:latest
 commands:
+  - id: install-maven
+    exec:
+      commandLine: |
+        apt-get update && apt-get install -y maven
+      component: web
+      group:
+        kind: setup
+        isDefault: true
   - id: build
     exec:
       commandLine: mvn clean install
-      component: runner
+      component: web
       workingDir: ${PROJECT_SOURCE}
-      hotReloadCapable: true
       group:
         kind: build
         isDefault: true
   - id: run
     exec:
       commandLine: mvn spring-boot:run
-      component: runner
+      component: web
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
         isDefault: true
-events:
-  postStart:
-    - build
-    - run
-variables:
-  # Memory limit on runner, default: 1Gi
-  memoryLimit: 0.5Gi
+  - id: tail-logs
+    exec:
+      commandLine: |
+        tail -f ${PROJECT_SOURCE}/file.log
+      component: web
+      group:
+        kind: debug
+        isDefault: true
+
