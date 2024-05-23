@@ -1,15 +1,15 @@
 schemaVersion: 2.2.0
 metadata:
-  name: mydevfile
+  name: spring-boot-demo1
 projects:
-  - name: my-maven-project
+  - name: spring-boot-demo
     git:
       remotes:
         origin: 'https://github.com/AkramMulani/spring-boot-demo.git'
 components:
   - name: maven
     container:
-      image: eclipse/maven-jdk8:latest
+      image: quay.io/devfile/maven:latest
       mountSources: true
       command: ['tail']
 commands:
