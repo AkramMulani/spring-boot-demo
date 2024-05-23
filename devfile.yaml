@@ -1,47 +1,72 @@
-schemaVersion: 2.2.0
+schemaVersion: 2.2.2
 metadata:
-  name: spring-boot-demo1
+  name: devfile-sample2
+  version: 0.0.1
+  description: A sample web service template.
+  projectType: Java
+  language: Java
+  provider: GitHub
+  tags:
+    - Java
+    - Maven
+    - SpringBoot
+  architectures: [ 'amd64' ]
+  displayName: Simple Web Service
+  icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
 projects:
   - name: spring-boot-demo
     git:
       remotes:
-        origin: 'https://github.com/AkramMulani/spring-boot-demo.git'
+        origin: https://github.com/AkramMulani/spring-boot-demo.git
 components:
-  - name: maven
+  - name: runner
+    attributes:
+      container-overrides:
+        securityContext:
+          runAsUser: 1001
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          capabilities:
+            drop: ["ALL"]
+          seccompProfile:
+            type: "RuntimeDefault"
     container:
-      image: quay.io/devfile/maven:latest
+      image: quay.io/devfile/universal-developer-image:ubi8-latest
       mountSources: true
+      memoryLimit: "{{memoryLimit}}"
+      volumeMounts:
+        - name: target
+          path: /target
+      endpoints:
+        - name: http-4200
+          protocol: http
+          targetPort: 4200
+  - name: target
+    volume:
+      ephemeral: true
+      size: 0.2Gi
 commands:
-  - id: package
+  - id: build
     exec:
-      component: maven
-      commandLine: 'mvn package'
+      commandLine: mvn clean install
+      component: runner
       workingDir: ${PROJECT_SOURCE}
-      label: 'package project'
-      group:
-        kind: build
-  - id: install
-    exec:
-      component: maven
-      commandLine: 'mvn install'
-      workingDir: ${PROJECT_SOURCE}
-      label: 'install maven artifacts'
+      hotReloadCapable: true
       group:
         kind: build
         isDefault: true
-  - id: spring-boot-run
+  - id: run
     exec:
-      component: maven
-      commandLine: 'mvn spring-boot:run'
+      commandLine: mvn spring-boot:run
+      component: runner
       workingDir: ${PROJECT_SOURCE}
-      label: 'spring boot run'
       group:
         kind: run
         isDefault: true
-  - id: installandpackage
-    composite:
-      commands:
-        - install
-        - package
-        - spring-boot-run
-      parallel: false
+events:
+  postStart:
+    - build
+    - run
+variables:
+  # Memory limit on runner, default: 1Gi
+  memoryLimit: 0.5Gi
