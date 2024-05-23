@@ -22,6 +22,7 @@ components:
   - name: runner
     container:
       image: quay.io/devfile/universal-developer-image:latest
+      command: ["tail"]
       env:
         - name: KUBEDOCK_ENABLED
           value: "true"
