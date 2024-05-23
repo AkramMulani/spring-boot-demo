@@ -52,5 +52,4 @@ commands:
         isDefault: true
 events:
   preStart:
-    - build-project
     - run-project
