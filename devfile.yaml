@@ -24,7 +24,7 @@ commands:
         apt-get update && apt-get install -y maven
       component: web
       group:
-        kind: setup
+        kind: build
         isDefault: true
   - id: build
     exec:
