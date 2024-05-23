@@ -11,13 +11,13 @@ components:
     container:
       image: quay.io/devfile/maven:latest
       mountSources: true
-      command: ['tail']
 commands:
   - id: package
     exec:
       component: maven
       commandLine: 'mvn package'
       workingDir: ${PROJECT_SOURCE}
+      label: 'package project'
       group:
         kind: build
   - id: install
@@ -25,6 +25,7 @@ commands:
       component: maven
       commandLine: 'mvn install'
       workingDir: ${PROJECT_SOURCE}
+      label: 'install maven artifacts'
       group:
         kind: build
         isDefault: true
@@ -33,6 +34,10 @@ commands:
       component: maven
       commandLine: 'mvn spring-boot:run'
       workingDir: ${PROJECT_SOURCE}
+      label: 'spring boot run'
+      group:
+        kind: run
+        isDefault: true
   - id: installandpackage
     composite:
       commands:
@@ -40,7 +45,3 @@ commands:
         - package
         - spring-boot-run
       parallel: false
-events:
-  componentStart:
-      component: maven
-      after: installandpackage
