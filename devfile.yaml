@@ -26,7 +26,7 @@ commands:
       group:
         kind: build
         isDefault: true
-  - id: build
+  - id: build-project
     exec:
       commandLine: mvn clean install
       component: web
@@ -34,7 +34,7 @@ commands:
       group:
         kind: build
         isDefault: true
-  - id: run
+  - id: run-project
     exec:
       commandLine: mvn spring-boot:run
       component: web
@@ -50,4 +50,8 @@ commands:
       group:
         kind: debug
         isDefault: true
-
+events:
+  workspaceStarted:
+    commands:
+      - build-project
+      - run-project
