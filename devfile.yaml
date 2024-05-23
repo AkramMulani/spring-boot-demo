@@ -1,53 +1,34 @@
-schemaVersion: 2.2.2
+schemaVersion: 2.2.0
 metadata:
-  generateName: workspace-
-  version: 0.0.1
-  description: A sample web service template.
-  projectType: Java
-  language: Java
-  provider: GitHub
-  tags:
-    - Java
-    - Maven
-    - SpringBoot
-  architectures: [ 'amd64' ]
-  displayName: Simple Web Service
-  icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
+  name: mydevfile
 projects:
-  - name: spring-boot-demo
+  - name: my-maven-project
     git:
       remotes:
-        origin: https://github.com/AkramMulani/spring-boot-demo.git
+        origin: 'https://github.com/AkramMulani/spring-boot-demo.git'
 components:
-  - name: runner
+  - name: maven
     container:
-      image: quay.io/devfile/universal-developer-image:latest
-      command: ['tail']
-      env:
-        - name: KUBEDOCK_ENABLED
-          value: "true"
+      image: eclipse/maven-jdk8:latest
       mountSources: true
-      memoryLimit: "{{memoryLimit}}"
+      command: ['tail']
 commands:
-  - id: build
+  - id: package
     exec:
-      commandLine: mvn clean install
-      component: runner
-      workingDir: ${PROJECT_SOURCE}
-      label: build spring boot demo
-      hotReloadCapable: true
+      component: maven
+      commandLine: 'mvn package'
+      group:
+        kind: build
+  - id: install
+    exec:
+      component: maven
+      commandLine: 'mvn install'
       group:
         kind: build
         isDefault: true
-  - id: run
-    exec:
-      commandLine: mvn spring-boot:run
-      component: runner
-      label: run spring boot demo
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: run
-        isDefault: true
-variables:
-  # Memory limit on runner, default: 1Gi
-  memoryLimit: 1Gi
+  - id: installandpackage
+    composite:
+      commands:
+        - install
+        - package
+      parallel: false
