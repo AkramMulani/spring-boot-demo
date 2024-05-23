@@ -48,4 +48,4 @@ commands:
       parallel: false
 events:
   postStart:
-    - installandpackage
+    - build-project
