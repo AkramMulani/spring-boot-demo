@@ -1,6 +1,6 @@
 schemaVersion: 2.2.2
 metadata:
-  name: devfile-sample1
+  name: workspace-devfile-sample2
   version: 0.0.1
   description: A sample web service template.
   projectType: Java
