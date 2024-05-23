@@ -18,14 +18,6 @@ components:
           targetPort: 8080
       image: quay.io/devfile/universal-developer-image:latest
 commands:
-  - id: install-maven
-    exec:
-      commandLine: |
-        apt-get update && apt-get install -y maven
-      component: web
-      group:
-        kind: build
-        isDefault: true
   - id: build-project
     exec:
       commandLine: mvn clean install
@@ -33,7 +25,6 @@ commands:
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
-        isDefault: true
   - id: run-project
     exec:
       commandLine: mvn spring-boot:run
@@ -41,7 +32,6 @@ commands:
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
-        isDefault: true
   - id: tail-logs
     exec:
       commandLine: |
@@ -56,9 +46,6 @@ commands:
         - build-project
         - run-project
       parallel: false
-  - id: run-my-app
-    apply:
-      component: web
 events:
-  preStart:
-    - run-my-app
+  postStart:
+    - installandpackage
