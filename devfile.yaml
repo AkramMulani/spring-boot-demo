@@ -53,5 +53,4 @@ commands:
 events:
   preStart:
     commands:
-      - build-project
       - run-project
