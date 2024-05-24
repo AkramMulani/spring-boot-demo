@@ -14,11 +14,6 @@ components:
       endpoints:
         - name: http-demo
           targetPort: 8085
-      env:
-        - name: DOCKER
-          value: podman
-        - name: KUBEDOCK_ENABLED
-          value: 'true'
 commands:
   - id: generic-build
     exec:
@@ -36,11 +31,3 @@ commands:
       workingDir: ${PROJECT_SOURCE}
       group:
         kind: run
-  - id: build-and-run
-    composite:
-      commands:
-        - generic-build
-        - generic-run
-events:
-  postStart:
-    - generic-run
