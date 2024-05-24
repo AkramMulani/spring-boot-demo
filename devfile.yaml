@@ -1,47 +1,46 @@
-schemaVersion: 2.2.2
+schemaVersion: 2.2.0
 metadata:
-  name: workspace-devfile-sample4
-  version: 0.0.1
-  description: A sample web service template.
-  projectType: Java
-  language: Java
-  provider: GitHub
-  tags: [ 'Java', 'Jar' ]
-  architectures: [ 'amd64' ]
-  displayName: Simple Web Service
-  icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
+  name: jetbrains-editor-images
+  namespace: admin-che
+projects:
+  - name: jetbrains-editor-spring-demo1
+    git:
+      remotes:
+        origin: https://github.com/AkramMulani/spring-boot-demo.git
 components:
-  - name: web
+  - name: devtools
     container:
-      endpoints:
-        - name: http
-          targetPort: 8080
       image: quay.io/devfile/universal-developer-image:latest
-      args: ['tail', '-f', '/dev/null']
+      cpuLimit: '4'
+      memoryLimit: 12Gi
+      env:
+        - name: DOCKER
+          value: podman
+        - name: KUBEDOCK_ENABLED
+          value: 'true'
 commands:
-  - id: build-project
+  - id: generic-build
     exec:
-      commandLine: mvn clean install
-      component: web
-      workingDir: ${PROJECT_SOURCE}
-  - id: run-project
+      commandLine: ./projector.sh build
+      component: devtools
+      label: Interactive build of supported JetBrains IDEs
+  - id: goland-build
     exec:
-      commandLine: mvn spring-boot:run
-      component: web
-      workingDir: ${PROJECT_SOURCE}
-  - id: tail-logs
+      commandLine: ./projector.sh build --url https://download.jetbrains.com/go/goland-2021.3.3.tar.gz --tag quay.io/che-incubator/che-goland:2021.3
+      component: devtools
+      label: Build of JetBrains GoLand container image
+  - id: raider-build
     exec:
-      commandLine: |
-        tail -f ${PROJECT_SOURCE}/file.log
-      component: web
-      group:
-        kind: debug
-  - id: installandpackage
-    composite:
-      commands:
-        - build-project
-        - run-project
-      parallel: false
-events:
-  postStart:
-    - run-project
+      commandLine: ./projector.sh build --url https://download.jetbrains.com/rider/JetBrains.Rider-2021.3.3.tar.gz --tag quay.io/che-incubator/che-rider:2021.3
+      component: devtools
+      label: Build of JetBrains Raider container image
+  - id: intellij-ultimate-build
+    exec:
+      commandLine: ./projector.sh build --url https://download.jetbrains.com/idea/ideaIU-2021.3.2.tar.gz --tag quay.io/che-incubator/che-ideaiu:2021.3
+      component: devtools
+      label: Build of JetBrains IntelliJ Ultimate container image
+  - id: intellij-run
+    exec:
+      commandLine: podman run -p 8887:8887 -d quay.io/che-incubator/che-idea:next
+      component: devtools
+      label: Run of JetBrains IntelliJ
