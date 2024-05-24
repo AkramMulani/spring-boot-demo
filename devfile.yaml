@@ -1,6 +1,6 @@
 schemaVersion: 2.2.0
 metadata:
-  name: simple-devfile-spring-boot
+  name: simple-devfile-spring-boot1
   namespace: admin-che
 projects:
   - name: spring-boot-demo1
