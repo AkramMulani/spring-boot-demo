@@ -11,7 +11,7 @@ components:
   - name: devtools
     container:
       image: quay.io/devfile/universal-developer-image:latest
-      memoryLimit: 12Gi
+      memoryLimit: 1Gi
       env:
         - name: DOCKER
           value: podman
@@ -20,26 +20,10 @@ components:
 commands:
   - id: generic-build
     exec:
-      commandLine: ./projector.sh build
+      commandLine: 'mvn clean install'
       component: devtools
-      label: Interactive build of supported JetBrains IDEs
-  - id: goland-build
-    exec:
-      commandLine: ./projector.sh build --url https://download.jetbrains.com/go/goland-2021.3.3.tar.gz --tag quay.io/che-incubator/che-goland:2021.3
-      component: devtools
-      label: Build of JetBrains GoLand container image
-  - id: raider-build
-    exec:
-      commandLine: ./projector.sh build --url https://download.jetbrains.com/rider/JetBrains.Rider-2021.3.3.tar.gz --tag quay.io/che-incubator/che-rider:2021.3
-      component: devtools
-      label: Build of JetBrains Raider container image
-  - id: intellij-ultimate-build
-    exec:
-      commandLine: ./projector.sh build --url https://download.jetbrains.com/idea/ideaIU-2021.3.2.tar.gz --tag quay.io/che-incubator/che-ideaiu:2021.3
-      component: devtools
-      label: Build of JetBrains IntelliJ Ultimate container image
-  - id: intellij-run
-    exec:
-      commandLine: podman run -p 8887:8887 -d quay.io/che-incubator/che-idea:next
-      component: devtools
-      label: Run of JetBrains IntelliJ
+      label: Build-Project
+      workingDir: ${PROJECT_SOURCE}
+events:
+  postStart:
+    - generic-build
