@@ -4,22 +4,65 @@ metadata:
   version: 1.0.0
   description: Devfile for Eclipse Che with LDAP authentication
 components:
-  - type: cheEditor
-  - type: chePlugin
-    reference: "
-https://github.com/eclipse/che-plugins/tree/main/ldap"
+  - name: ldap-auth
+    container:
+      image: quay.io/eclipse/che-ldap-plugin:latest
+      env:
+        - name: CHE_LDAP__ENABLED
+          value: "true"
+        - name: CHE_LDAP__URL
+          value: "ldap://ldap.example.com:389"
+        - name: CHE_LDAP__ROOTDN
+          value: "dc=example,dc=com"
+        - name: CHE_LDAP__USER__SEARCH__FILTER
+          value: "(uid={0})"
+        - name: CHE_LDAP__USER__SEARCH__BASE
+          value: "ou=Users"
+        - name: CHE_LDAP__USER__DN__PATTERN
+          value: "uid={0},ou=Users,dc=example,dc=com"
+  - name: web
+    container:
+      image: quay.io/devfile/universal-developer-image
+      endpoints:
+        - name: http
+          targetPort: 8080
 commands:
+  - id: build
+    exec:
+      commandLine: mvn clean install
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+  - id: run
+    exec:
+      commandLine: mvn spring-boot:run
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
+  - id: configure-ldap
+    exec:
+      commandLine: |
+        export CHE_LDAP__ENABLED=true && \
+        export CHE_LDAP__URL=ldap://ldap.example.com:389 && \
+        export CHE_LDAP__ROOTDN=dc=example,dc=com && \
+        export CHE_LDAP__USER__SEARCH__FILTER="(uid={0})" && \
+        export CHE_LDAP__USER__SEARCH__BASE="ou=Users" && \
+        export CHE_LDAP__USER__DN__PATTERN="uid={0},ou=Users,dc=example,dc=com"
+      component: ldap-auth
+      group:
+        kind: init
+        isDefault: true
   - id: start
-    actions:
-      - plugin: ldap
-        action: configure
-        parameters:
-          serverUrl: "ldap://ldap.example.com:389"
-          bindDN: "cn=admin,dc=example,dc=com"
-          bindPassword: "adminPassword"
-          userSearchBase: "ou=Users,dc=example,dc=com"
-          userSearchFilter: "(uid={0})"
-          userDN: "uid={0},ou=Users,dc=example,dc=com"
+    composite:
+      commands:
+        - configure-ldap
+        - run
+      parallel: false
   - id: stop
-    actions:
-      - stop: true
+    exec:
+      commandLine: mvn spring-boot:stop
+      component: web
