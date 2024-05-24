@@ -3,7 +3,7 @@ metadata:
   name: simple-devfile-spring-boot
   namespace: admin-che
 projects:
-  - name: jetbrains-editor-spring-demo1
+  - name: spring-boot-demo1
     git:
       remotes:
         origin: https://github.com/AkramMulani/spring-boot-demo.git
