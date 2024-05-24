@@ -11,7 +11,9 @@ components:
   - name: devtools
     container:
       image: quay.io/devfile/universal-developer-image:latest
-      memoryLimit: 1Gi
+      endpoints:
+        - name: http-demo
+          targetPort: 8085
       env:
         - name: DOCKER
           value: podman
@@ -24,13 +26,21 @@ commands:
       component: devtools
       label: Build-Project
       workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
   - id: generic-run
     exec:
       commandLine: 'mvn spring-boot:run'
       component: devtools
       label: Run-Project
       workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+  - id: build-and-run
+    composite:
+      commands:
+        - generic-build
+        - generic-run
 events:
   postStart:
-    - generic-build
     - generic-run
