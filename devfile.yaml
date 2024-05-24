@@ -24,6 +24,13 @@ commands:
       component: devtools
       label: Build-Project
       workingDir: ${PROJECT_SOURCE}
+  - id: generic-run
+    exec:
+      commandLine: 'mvn spring-boot:run'
+      component: devtools
+      label: Run-Project
+      workingDir: ${PROJECT_SOURCE}
 events:
   postStart:
     - generic-build
+    - generic-run
