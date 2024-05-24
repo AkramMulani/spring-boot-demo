@@ -1,56 +1,47 @@
-schemaVersion: 2.2.0
+schemaVersion: 2.2.2
 metadata:
-  name: java-springboot
-  version: 1.2.1
-  attributes:
-    alpha.dockerimage-port: 8081
-  displayName: Spring Boot®
-  description: Spring Boot® using Maven
-  icon: https://raw.githubusercontent.com/devfile-samples/devfile-stack-icons/main/spring.svg
-  tags:
-    - Java
-    - Spring
-  projectType: springboot
+  name: workspace-devfile-sample3
+  version: 0.0.1
+  description: A sample web service template.
+  projectType: Java
   language: Java
-  provider: Red Hat
-  supportUrl: https://github.com/devfile-samples/devfile-support#support-information
-parent:
-  id: java-springboot
-  registryUrl: 'https://registry.devfile.io'
-  version: 1.2.0
+  provider: GitHub
+  tags: [ 'Java', 'Jar' ]
+  architectures: [ 'amd64' ]
+  displayName: Simple Web Service
+  icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
 components:
-  - name: image-build
-    image:
-      imageName: java-springboot-image:latest
-      dockerfile:
-        uri: docker/Dockerfile
-        buildContext: .
-        rootRequired: false
-  - name: kubernetes-deploy
-    attributes:
-      deployment/replicas: 1
-      deployment/cpuRequest: 10m
-      deployment/memoryRequest: 180Mi
-      deployment/container-port: 8081
-    kubernetes:
-      uri: deploy.yaml
+  - name: web
+    container:
       endpoints:
-        - name: http-8081
-          targetPort: 8081
-          path: /
-          secure: true
+        - name: http
+          targetPort: 8080
+      image: quay.io/devfile/universal-developer-image:latest
+      args: ['tail', '-f', '/dev/null']
 commands:
-  - id: build-image
-    apply:
-      component: image-build
-  - id: deployk8s
-    apply:
-      component: kubernetes-deploy
-  - id: deploy
+  - id: build-project
+    exec:
+      commandLine: mvn clean install
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+  - id: run-project
+    exec:
+      commandLine: mvn spring-boot:run
+      component: web
+      workingDir: ${PROJECT_SOURCE}
+  - id: tail-logs
+    exec:
+      commandLine: |
+        tail -f ${PROJECT_SOURCE}/file.log
+      component: web
+      group:
+        kind: debug
+  - id: installandpackage
     composite:
       commands:
-        - build-image
-        - deployk8s
-      group:
-        kind: deploy
-        isDefault: true
+        - build-project
+        - run-project
+      parallel: false
+events:
+  postStart:
+    - run-project
