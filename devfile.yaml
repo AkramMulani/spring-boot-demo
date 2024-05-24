@@ -54,7 +54,7 @@ commands:
         export CHE_LDAP__USER__DN__PATTERN="uid={0},ou=Users,dc=example,dc=com"
       component: ldap-auth
       group:
-        kind: init
+        kind: deploy
         isDefault: true
   - id: start
     composite:
