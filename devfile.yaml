@@ -1,52 +1,25 @@
 schemaVersion: 2.2.2
 metadata:
-  name: workspace-devfile-sample3
-  version: 0.0.1
-  description: A sample web service template.
-  projectType: Java
-  language: Java
-  provider: GitHub
-  tags: [ 'Java', 'Jar' ]
-  architectures: [ 'amd64' ]
-  displayName: Simple Web Service
-  icon: https://github.com/AkramMulani/spring-boot-demo/tree/test/assets/spring_icon.png
+  name: devfile-with-ldap
+  version: 1.0.0
+  description: Devfile for Eclipse Che with LDAP authentication
 components:
-  - name: web
-    container:
-      endpoints:
-        - name: http
-          targetPort: 8080
-      image: quay.io/devfile/universal-developer-image:latest
+  - type: cheEditor
+  - type: chePlugin
+    reference: "
+https://github.com/eclipse/che-plugins/tree/main/ldap"
 commands:
-  - id: build-project
-    exec:
-      commandLine: mvn clean install
-      component: web
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: build
-        isDefault: true
-  - id: run-project
-    exec:
-      commandLine: mvn spring-boot:run
-      component: web
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: run
-  - id: tail-logs
-    exec:
-      commandLine: |
-        tail -f ${PROJECT_SOURCE}/file.log
-      component: web
-      group:
-        kind: debug
-        isDefault: true
-  - id: installandpackage
-    composite:
-      commands:
-        - build-project
-        - run-project
-      parallel: false
-events:
-  postStart:
-    - run-project
+  - id: start
+    actions:
+      - plugin: ldap
+        action: configure
+        parameters:
+          serverUrl: "ldap://ldap.example.com:389"
+          bindDN: "cn=admin,dc=example,dc=com"
+          bindPassword: "adminPassword"
+          userSearchBase: "ou=Users,dc=example,dc=com"
+          userSearchFilter: "(uid={0})"
+          userDN: "uid={0},ou=Users,dc=example,dc=com"
+  - id: stop
+    actions:
+      - stop: true
