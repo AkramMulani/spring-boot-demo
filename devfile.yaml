@@ -1,68 +1,56 @@
-schemaVersion: 2.2.2
+schemaVersion: 2.2.0
 metadata:
-  name: devfile-with-ldap
-  version: 1.0.0
-  description: Devfile for Eclipse Che with LDAP authentication
+  name: java-springboot
+  version: 1.2.1
+  attributes:
+    alpha.dockerimage-port: 8081
+  displayName: Spring Boot®
+  description: Spring Boot® using Maven
+  icon: https://raw.githubusercontent.com/devfile-samples/devfile-stack-icons/main/spring.svg
+  tags:
+    - Java
+    - Spring
+  projectType: springboot
+  language: Java
+  provider: Red Hat
+  supportUrl: https://github.com/devfile-samples/devfile-support#support-information
+parent:
+  id: java-springboot
+  registryUrl: 'https://registry.devfile.io'
+  version: 1.2.0
 components:
-  - name: ldap-auth
-    container:
-      image: quay.io/eclipse/che-ldap-plugin:latest
-      env:
-        - name: CHE_LDAP__ENABLED
-          value: "true"
-        - name: CHE_LDAP__URL
-          value: "ldap://ldap.example.com:389"
-        - name: CHE_LDAP__ROOTDN
-          value: "dc=example,dc=com"
-        - name: CHE_LDAP__USER__SEARCH__FILTER
-          value: "(uid={0})"
-        - name: CHE_LDAP__USER__SEARCH__BASE
-          value: "ou=Users"
-        - name: CHE_LDAP__USER__DN__PATTERN
-          value: "uid={0},ou=Users,dc=example,dc=com"
-  - name: web
-    container:
-      image: quay.io/devfile/universal-developer-image
+  - name: image-build
+    image:
+      imageName: java-springboot-image:latest
+      dockerfile:
+        uri: docker/Dockerfile
+        buildContext: .
+        rootRequired: false
+  - name: kubernetes-deploy
+    attributes:
+      deployment/replicas: 1
+      deployment/cpuRequest: 10m
+      deployment/memoryRequest: 180Mi
+      deployment/container-port: 8081
+    kubernetes:
+      uri: deploy.yaml
       endpoints:
-        - name: http
-          targetPort: 8080
+        - name: http-8081
+          targetPort: 8081
+          path: /
+          secure: true
 commands:
-  - id: build
-    exec:
-      commandLine: mvn clean install
-      component: web
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: build
-        isDefault: true
-  - id: run
-    exec:
-      commandLine: mvn spring-boot:run
-      component: web
-      workingDir: ${PROJECT_SOURCE}
-      group:
-        kind: run
-        isDefault: true
-  - id: configure-ldap
-    exec:
-      commandLine: |
-        export CHE_LDAP__ENABLED=true && \
-        export CHE_LDAP__URL=ldap://ldap.example.com:389 && \
-        export CHE_LDAP__ROOTDN=dc=example,dc=com && \
-        export CHE_LDAP__USER__SEARCH__FILTER="(uid={0})" && \
-        export CHE_LDAP__USER__SEARCH__BASE="ou=Users" && \
-        export CHE_LDAP__USER__DN__PATTERN="uid={0},ou=Users,dc=example,dc=com"
-      component: ldap-auth
+  - id: build-image
+    apply:
+      component: image-build
+  - id: deployk8s
+    apply:
+      component: kubernetes-deploy
+  - id: deploy
+    composite:
+      commands:
+        - build-image
+        - deployk8s
       group:
         kind: deploy
         isDefault: true
-  - id: start
-    composite:
-      commands:
-        - configure-ldap
-        - run
-      parallel: false
-  - id: stop
-    exec:
-      commandLine: mvn spring-boot:stop
-      component: web
